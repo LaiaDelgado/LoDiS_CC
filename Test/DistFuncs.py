@@ -28,11 +28,9 @@ def Euc_Dist(i_frame, positions):
     Distances=[]
     for i in range(len(positions)-1):
         for j in range(i+1,len(positions)):
-            Euc=(positions[i,0]-positions[j,0])**2
-            +(positions[i,1]-positions[j,1])**2
-            +(positions[i,2]-positions[j,2])**2
+            Euc = distance(positions[i],positions[j])
 
-    Distances.append(np.sqrt(Euc))
+            Distances.append(np.sqrt(Euc))
     return Distances
 
 
@@ -44,7 +42,7 @@ def Homo(i_frame, positions, elements, specie):
     for i in range(len(Vector)-1):
         for j in range(i+1,len(Vector)):
             if Vector[i,0]==specie and Vector[j,0]==specie:
-                Euc=(Temp[i,0]-Temp[j,0])**2+(Temp[i,1]-Temp[j,1])**2+(Temp[i,2]-Temp[j,2])**2
+                Euc=distance(Temp[i],Temp[j])
                 Distances.append(np.sqrt(Euc))
     return Distances
         
@@ -133,4 +131,3 @@ def RDF(i_frame, positions, Res, R_Cut):
         G[i] = value / Volumes[i] #Rescaling the distribution with respect to enclosing volume
 
     return Radii, G
-

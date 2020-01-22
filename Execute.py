@@ -1,8 +1,6 @@
 from Adjacent import *
 from CNA  import *
 from Kernels import *
-from Pressure import *
-from RDF import *
 from Energy import *
 from ase.io import read
 
@@ -20,14 +18,21 @@ debugging and support transparency.
 
 
 Start: int = 0
-End: int = 50
-Step: int = 10
+End: int = 2
+Step: int = 1
 
 Time=int((End-Start)/Step)
 
+
+"""
+Robert:
+    Change the arguments in the System dictionary to 
+    reflect the directory and files you are working with.
+"""
+
 System = {
-        'base_dir' : '/home/k1899676/Documents/PhD/Coding/Samples/',
-        'movie_file_name' : 'JanusMeltMovie1.xyz',
+        'base_dir' : '/home/k1899676/Documents/PhD/SampleTraj/',
+        'movie_file_name' : 'movie.xyz',
         'energy_file_name' : 'JanusMeltEn1.out'}
 
 
@@ -37,6 +42,7 @@ filename = System['base_dir']+System['movie_file_name']
 Dataset = read(System['base_dir']+System['movie_file_name'], index = 0)
 all_atoms = Dataset.get_chemical_symbols()
 Masterkey=Master(System['base_dir']+System['movie_file_name'],3.0)
+
 
 
 """
@@ -74,7 +80,7 @@ for i in range(End-Start):
     metadata['NSpecies']=len(Species)
     metadata['NFrames'] = Time
     metadata['NAtoms'] = NAtoms
-    
+    metadata['Masterkey'] = Masterkey
     
     """
     Robert:
@@ -90,10 +96,10 @@ for i in range(End-Start):
     metadata['pos'][int(i/Step)] = result_cache['pos']
 
     result_cache['euc'] = Euc_Dist(i, result_cache['pos'])
-    metadata['euc'] = result_cache['euc']
+    metadata['euc'][int(i/Step)] = result_cache['euc']
     
     result_cache['pdf'] = Kernels.Uniform(result_cache['euc'], 0.25)
-    metadata['pdf'] = result_cache['pdf']
+    metadata['pdf'][int(i/Step)] = result_cache['pdf']
     
     
     
@@ -102,24 +108,35 @@ for i in range(End-Start):
         For the homo, it's a bit trickier for quick introduction stuff.
     """
     
+    """
+    Robert:
+        Pro-tip. Be sure to change the final argument in Homo(frame, positions, elements, specie,)
+        to whichever compound you want to work with.
+        
+    """
     
+    result_cache['homo'] = Homo(i, result_cache['pos'], metadata['Elements'], 'Cu')
     
-    result_cache['homo'] = Homo(i, result_cache['pos'], metadata['Elements'], 'Au')
-    metadata['homo'] = np.zeros((Time, len(result_cache['homo'])))
+    if i == Start:
+        metadata['homo'] = np.zeros((Time,  len(result_cache['homo'])))
+        continue
     metadata['homo'][int(i/Step)] = result_cache['homo']
     
     result_cache['pdfhomo'] = Kernels.Uniform(result_cache['homo'], 0.25)
-    metadata['pdfhomo'] = result_cache['pdfhomo']
-   
+    metadata['pdfhomo'][int(i/Step)] = result_cache['pdfhomo']
+    
     
     result_cache['rdf'] = RDF(i, result_cache['pos'], 500, 10.0)
     metadata['rdf'][int(i/Step)] = result_cache['rdf']   
     
     result_cache['adj'] = Adjacency_Matrix(i, result_cache['pos'], R_Cut=3.0)
     metadata['adj'][int(i/Step)] = result_cache['adj']
+	
 
+    print(i)
+    i+=Step
     
-    i+=Step*1
+
 
 
 """
@@ -130,3 +147,4 @@ Robert:
 
 
 metadata['cna'] = CNA_Sig_Frame(filename, Masterkey, R_Cut=3.0, Frames = End, Skip = Step)
+

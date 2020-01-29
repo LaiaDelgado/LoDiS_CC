@@ -27,7 +27,7 @@ def get_all_cnas(filename, r_cut):
     Returns:
         sorted_cnas_dict: A dictionary whose keys are all of the identified CNA
         signtures appearing in the trajectory.
-        The value associated with each key is the number of occurances.
+        The value associated with each key is the number of occurrences.
         
     
     If one wishes to observe the entire distribution of CNA signatures over the 
@@ -35,7 +35,7 @@ def get_all_cnas(filename, r_cut):
     
     
     I personally use this to initially identify all of the signatures so that I may
-    then identify frame-wise distributions for the cNA signatures.
+    then identify frame-wise distributions for the CNA signatures.
     """
     
     all_cnas = {}
@@ -107,7 +107,7 @@ def get_cnas(filename, R_Cut, j):
             This could be passed from a higher function
             or simply stated at the start of a run.
         
-        j: Integer whicha specifies the frame of the trajectory file to be called
+        j: Integer whichh specifies the frame of the trajectory file to be called
         
     Returns:
         (Key, Num) The tuple of the CNA signature alongside the number of times it has
@@ -152,14 +152,14 @@ def CNA_Sig_Frame(filename, MasterKey, R_Cut, Frames, Skip):
             Normally something like 'movie.xyz'
         
         MasterKey: The output from calling the Master function.
-        This is to do pairwise comparrison for creating full 
+        This is to do pairwise comparison for creating full 
         distributions without having to know what the craic is.
             
         
         R_Cut: The nearest neighbour spacing as a float
             This could be passed from a higher function
             or simply stated at the start of a run.
-        Frames: (int) The number of frames f your movie  file you wish to 
+        Frames: (int) The number of frames from your movie  file you wish to 
         consider up to
         
         Skip: (int) How many frames you wish to pass over before recording new data.
@@ -244,7 +244,7 @@ class Dist_Stats():
             reject the null hypothesis that two sets of observations are drawn
             from the same distribution
             
-            A fun wikiquoutes quote because I was bored and felt like learning while coding...
+            A fun wikiquotes quote because I was bored and felt like learning while coding...
             
             """
             
@@ -274,7 +274,7 @@ class Dist_Stats():
                 I care about plotting this as I suspect strong delineations in the growth
                 of mutual entropy as the system undergoes a phase transition.
             
-            A fun wikiquoutes quote because I was bored and felt like learning while coding...
+            A fun wikiquotes quote because I was bored and felt like learning while coding...
             
             """
             
